@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RB Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Global Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: white;
+            padding: 20px 0;
+            color: #333;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header nav a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+        }
+        .header nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Cart Styling */
+        .cart {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .cart-count {
+            background-color: red;
+            color: white;
+            font-size: 14px;
+            border-radius: 50%;
+            padding: 5px 10px;
+            margin-left: 5px;
+        }
+
+        /* Carousel Styling */
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 400px; /* Membatasi lebar gambar carousel */
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .carousel-images img {
+            width: 100%;
+            height: auto; /* Pastikan gambar tidak melebihi kontainer */
+            border-radius: 8px;
+        }
+        .carousel-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+        .carousel-button {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Product Detail Section */
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .product-detail {
+            display: flex;
+            flex-wrap: wrap; /* Agar elemen bisa menyesuaikan jika layar lebih kecil */
+            gap: 20px; /* Memberikan jarak antar elemen */
+            align-items: flex-start; /* Agar elemen tidak saling bertumpukan */
+        }
+        .product-info {
+            width: 100%; /* Memastikan bagian ini menggunakan 100% di layar kecil */
+            max-width: 600px; /* Membatasi lebar untuk tampilan yang lebih besar */
+        }
+        .product-info h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .product-info .rating {
+            color: #e63946;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .product-info .price {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .product-info .price .original {
+            text-decoration: line-through;
+            color: #aaa;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+        .product-info .description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .buy-button, .cart-button, .order-button {
+            color: #fff;
+            font-size: 18px;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .buy-button:hover, .cart-button:hover, .order-button:hover {
+            background-color: #e63946;
+        }
+        .cart-button, .order-button {
+            margin-left: 10px;
+        }
+        .cart-button i, .order-button i {
+            margin-right: 10px;
+        }
+
+        /* Specific button styles */
+        .cart-button {
+            background-color: #fff;
+            color: #2d6a4f;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .order-button {
+            background-color: #FF5722; 
+            color: #fff;
+        }
+        .buy-button {
+            background-color: #fff;
+            color: #2d6a4f;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            .product-info {
+                width: 60%; /* Menjaga lebar tetap proporsional di layar lebih besar */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <h1><a href="index.html" style="color: rgb(4, 4, 4); text-decoration: none;">RB Gallery</a></h1>
+        <nav>
+            <a href="index.html">Beranda</a>
+            <a href="produk.html">Produk</a>
+            <a href="kontak.html">Contact</a>
+        </nav>
+        <!-- Cart Icon with count -->
+        <div class="cart" id="cartLink" onclick="window.location.href='cart.html';">
+            <i class="fas fa-shopping-cart"></i> 
+            <span id="cartCount" class="cart-count">0</span>
+        </div>
+    </header>
+
+    <!-- Product Detail Section -->
+    <div class="container">
+        <div class="product-detail">
+            <!-- Carousel for Product Images -->
+            <div class="carousel">
+                <div class="carousel-images">
+                    <img src="img/Batik 13.jpg" alt="Batik 1">
+                    <img src=" " alt="Batik 2">
+                    <img src=" " alt="Batik 3">
+                </div>
+                <div class="carousel-buttons">
+                    <button class="carousel-button" id="prevBtn">&#10094;</button>
+                    <button class="carousel-button" id="nextBtn">&#10095;</button>
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="product-info">
+                <h1>Batik Flora Navy</h1>
+                <div class="rating">⭐⭐⭐⭐☆ (50 ulasan)</div>
+                <div class="price">
+                    Rp50.000 <span class="original">Rp60.000</span>
+                </div>
+                <div class="description">
+                    Batik bermotif bunga dengan dominasi warna navy,
+                    memberikan kesan mewah dan berkelas.
+                </div>
+                <!-- Tombol Beli Sekarang yang mengarah ke halaman pemesanan -->
+                <a href="order-form.html" class="buy-button">Beli Sekarang</a>
+                <button class="cart-button" onclick="addToCart()">
+                    <i class="fas fa-shopping-cart"></i> Keranjang
+                </button>
+                <button class="order-button" onclick="window.location.href='https://id.shp.ee/FgCWeAT';">
+                    <i class="fab fa-shopify" style="margin-right: 10px;"></i> Order Shopee
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the cart count
+        let cartCount = 0;
+
+        // Function to update cart count
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        // Function to add items to the cart
+        function addToCart() {
+            cartCount++;  // Increase the cart count by 1
+            updateCartCount();  // Update the displayed cart count
+        }
+
+        // Carousel functionality for auto sliding and buttons
+        let currentIndex = 0;
+        const images = document.querySelectorAll('.carousel-images img');
+        const totalImages = images.length;
+
+        const showImage = (index) => {
+            const carousel = document.querySelector('.carousel-images');
+            carousel.style.transform = `translateX(-${index * 100}%)`;
+        };
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % totalImages;
+            showImage(currentIndex);
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+            showImage(currentIndex);
+        });
+
+        showImage(currentIndex);  // Initially show the first image
+    </script>
+</body>
+</html>
